@@ -1,6 +1,6 @@
 const express = require('express');
-const { Tag, Product, ProductTag } = require('./models');
-
+const routes = require('./routes');
+const db = require('./config/connection.js')
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -10,9 +10,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-//app.use(routes);
+app.use(routes);
+db.sync({
+    force: false,
+})
+.then (() => {
+    app.listen(PORT, () => {
+        console.log(`App listening on port ${PORT}!`);
+    });
+})
 
-app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}!`);
-});
+
 
